@@ -1,0 +1,18 @@
+[
+  {
+    "process_name": "Code.exe",
+    "window_title": "her - Visual Studio Code",
+    "start_time": 1701763200000,
+    "end_time": 1701766800000,
+    "duration_seconds": 3600,
+    "category": "work"
+  },
+  {
+    "process_name": "chrome.exe",
+    "window_title": "YouTube - Lofi Hip Hop",
+    "start_time": 1701766800000,
+    "end_time": 1701770400000,
+    "duration_seconds": 3600,
+    "category": "entertainment"
+  }
+]
