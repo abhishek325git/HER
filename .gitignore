@@ -2,7 +2,9 @@
 node_modules/
 package-lock.json
 
-# Build outputs
+# Scripts with API keys
+scripts/verify-gemini.js
+scripts/list-models.js
 dist/
 dist-electron/
 *.tsbuildinfo
