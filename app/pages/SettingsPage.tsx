@@ -292,68 +292,37 @@ export default function SettingsPage() {
               Email Configuration
             </h3>
             
+            {/* Hardcoded SMTP Settings (Hidden from UI) */}
             <div className="space-y-4">
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">SMTP Host</label>
-                <Input
-                  placeholder="smtp.gmail.com"
-                  value={emailForm.smtpHost}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setEmailForm({ ...emailForm, smtpHost: e.target.value })}
-                />
+              <div className="hidden">
+                <Input value={emailForm.smtpHost} readOnly />
+                <Input value={emailForm.smtpPort} readOnly />
+                <Input value={emailForm.user} readOnly />
+                <Input value={emailForm.password} readOnly />
+              </div>
+              
+              <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground mb-4">
+                <p>Email services are configured via <strong>smtp.gmail.com</strong>.</p>
+                <p>Sending from: <strong>abhisheksworkuk@gmail.com</strong></p>
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">SMTP Port</label>
-                <Input
-                  type="number"
-                  placeholder="587"
-                  value={emailForm.smtpPort}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setEmailForm({ ...emailForm, smtpPort: parseInt(e.target.value) || 587 })}
-                />
-              </div>
-              
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Email Address (From)</label>
-                <Input
-                  type="email"
-                  placeholder="your-email@gmail.com"
-                  value={emailForm.user}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setEmailForm({ ...emailForm, user: e.target.value })}
-                />
-              </div>
-              
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">
-                  App Password 
-                  <a 
-                    href="https://myaccount.google.com/apppasswords" 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="text-primary hover:underline ml-2"
-                  >
-                    (Generate for Gmail)
-                  </a>
-                </label>
-                <Input
-                  type="password"
-                  placeholder="xxxx xxxx xxxx xxxx"
-                  value={emailForm.password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setEmailForm({ ...emailForm, password: e.target.value })}
-                />
-              </div>
-              
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Send Reminders To</label>
+                <label className="text-sm font-medium mb-1 block">Send Reminders To</label>
                 <Input
                   type="email"
                   placeholder="your-email@gmail.com"
                   value={emailForm.recipient}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setEmailForm({ ...emailForm, recipient: e.target.value })}
+                    setEmailForm({ 
+                      ...emailForm, 
+                      recipient: e.target.value,
+                      // Ensure hardcoded values are always preserved
+                      smtpHost: 'smtp.gmail.com',
+                      smtpPort: 587,
+                      user: 'abhisheksworkuk@gmail.com',
+                      password: 'noab ulkg doht treo'
+                    })
+                  }
                 />
               </div>
               

@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useChatStore } from '../lib/store/chat-store';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Trash2 } from 'lucide-react';
 
 export default function ChatPage() {
-  const { messages, sendMessage, initialize, isLoading } = useChatStore();
+  const { messages, sendMessage, initialize, isLoading, clearChat } = useChatStore();
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -31,8 +31,20 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <header className="h-16 border-b border-border flex items-center px-6 bg-card">
+      <header className="h-16 border-b border-border flex items-center justify-between px-6 bg-card">
         <h2 className="text-xl font-semibold">Chat Assistant</h2>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+              clearChat();
+            }
+          }} 
+          title="Clear Chat"
+        >
+          <Trash2 size={20} />
+        </Button>
       </header>
 
       {/* Messages */}

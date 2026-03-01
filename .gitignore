@@ -38,3 +38,14 @@ coverage/
 # Temporary files
 *.tmp
 *.swp
+
+# Build Output
+HER-Build/
+
+# Generated Reports and Temp Scripts
+Activity_Report.md
+Project_Report.html
+debug_usage.js
+figure*.png
+generate_report.js
+temp_usage.json

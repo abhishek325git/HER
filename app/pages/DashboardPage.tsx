@@ -193,6 +193,7 @@ export default function DashboardPage() {
   const [isLive, setIsLive] = useState<boolean>(false);
   const [lastUpdate, setLastUpdate] = useState<string>('');
   const [rawEntries, setRawEntries] = useState<UsageEntry[]>([]);
+  const [todayEntries, setTodayEntries] = useState<UsageEntry[]>([]);
 
   useEffect(() => {
     loadData();
@@ -250,8 +251,24 @@ export default function DashboardPage() {
     
     setRawEntries(entries);
     
-    // Calculate real stats
-    const calculatedStats = calculateStats(entries);
+    // Get today's date range (12:00 AM to 11:59 PM)
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+    
+    // Filter entries for TODAY only (for stats calculation)
+    const todayEntries = entries.filter(entry => {
+      const entryTime = new Date(entry.start_time);
+      return entryTime >= todayStart && entryTime <= todayEnd;
+    });
+    
+    console.log("[Dashboard] Total entries:", entries.length, "| Today's entries:", todayEntries.length);
+    
+    // Store today's entries for display
+    setTodayEntries(todayEntries);
+    
+    // Calculate stats for TODAY only
+    const calculatedStats = calculateStats(todayEntries);
     setStats(calculatedStats);
     
     // Prepare chart data - last 7 days
@@ -459,11 +476,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Recent Activity */}
+      {/* Today's Activity */}
       <div className="bg-card rounded-xl border border-border p-4">
-        <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+        <h3 className="text-lg font-semibold mb-4">Today's Activity</h3>
         <div className="space-y-2 max-h-[300px] overflow-y-auto">
-          {rawEntries
+          {todayEntries
             .filter(isImportantActivity)
             .sort((a, b) => b.duration_seconds - a.duration_seconds)
             .slice(0, 15)

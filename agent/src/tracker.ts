@@ -66,11 +66,39 @@ export class Tracker {
     if (this.isTracking) return;
     this.isTracking = true;
     console.log(`[Tracker] Started (polling every ${intervalMs}ms)`);
+    
+    // Initialize lastPollTime
+    let lastPollTime = Date.now();
 
     setInterval(async () => {
       try {
         const windowInfo = await getActiveWindow();
         const now = Date.now();
+        
+        // Check for sleep/suspend (gap > 3x interval)
+        const timeSinceLastPoll = now - lastPollTime;
+        if (timeSinceLastPoll > intervalMs * 3) {
+            console.log(`[Tracker] Sleep/Suspend detected (gap: ${Math.round(timeSinceLastPoll/1000)}s)`);
+            
+            // Log the pending session up to the point of sleep
+            if (this.lastWindow) {
+                const durationBeforeSleep = Math.floor((lastPollTime - this.lastCheckTime) / 1000);
+                if (durationBeforeSleep > 1) {
+                    const category = categorizeWindow(this.lastWindow.Process, this.lastWindow.Title);
+                    db.logUsage(
+                        this.lastWindow.Process, 
+                        this.lastWindow.Title, 
+                        this.lastCheckTime, 
+                        durationBeforeSleep, 
+                        category
+                    );
+                    console.log(`[Tracker] Logged (Pre-Sleep): ${this.lastWindow.Process} - ${durationBeforeSleep}s`);
+                }
+            }
+            // Reset timer for new session after sleep
+            this.lastCheckTime = now;
+        }
+        lastPollTime = now;
 
         if (windowInfo && windowInfo.Process) {
             // Check if window changed
@@ -93,6 +121,7 @@ export class Tracker {
                 }
                 this.lastCheckTime = now;
             } else if (!this.lastWindow) {
+                // First window detection
                 this.lastCheckTime = now;
             }
             

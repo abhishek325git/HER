@@ -1,4 +1,4 @@
-$Action = New-ScheduledTaskAction -Execute "npm" -Argument "run start-agent" -WorkingDirectory "$PSScriptRoot"
+$Action = New-ScheduledTaskAction -Execute "npm" -Argument "run dev" -WorkingDirectory "$PSScriptRoot"
 $Trigger = New-ScheduledTaskTrigger -AtLogon
 $Principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Users" -RunLevel Highest
 $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit 0
